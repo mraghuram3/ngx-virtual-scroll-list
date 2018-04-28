@@ -1,0 +1,4 @@
+
+<div ngxVirtualScroll [items]="data" *ngIf="data?.length>0" [minRowHeight]="25" (change)="displayData =$event?.data;actualIndex = $event.startIndex" class="parent">
+    <div ngxVirtualScrollElement [minRowHeight]="25" *ngFor="let r of displayData;let i = index;" [rangeStart]="actualIndex" [elemIndex]="i">{{r}}</div>
+</div>
