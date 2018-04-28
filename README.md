@@ -1,27 +1,89 @@
-# DatePicker
+# ngx-virtual-scroll-list
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+Angular Directive to add virtual scroll.
 
-## Development server
+Live Demo : https://mraghuram3.github.io/#/ngx-virtual-scroll-list
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Installation
 
-## Code scaffolding
+To install this library, run:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+$ npm install ngx-virtual-scroll-list --save
+```
 
-## Build
+## Consuming your library
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Once you have published your library to npm, you can import your library in any Angular application by running:
 
-## Running unit tests
+```bash
+$ npm install ngx-virtual-scroll-list --save
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Usage
 
-## Running end-to-end tests
+Import `NgxVirtualScrollModule` in the root module
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+```ts
+import { NgxVirtualScrollModule } from 'ngx-text-highlight';
 
-## Further help
+@NgModule({
+  imports: [
+    // ...
+    NgxVirtualScrollModule.forRoot(),
+    ...
+  ]
+})
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+In your template
+
+```html
+<div ngxVirtualScroll [items]="data" [minRowHeight]="25" (change)="onChangeData($event)" class="parent">
+    <div ngxVirtualScrollElement [minRowHeight]="25" *ngFor="let r of displayData;let i = index;" [rangeStart]="actualIndex" [elemIndex]="i">{{r}}</div>
+</div>
+```
+- **ngxVirtualScroll**
+
+  Add the directive to the div or other dom in which the elemnts are to be loaded 
+
+- **[items]**: any[].
+
+  The data which is populated on the virtual scroll list
+
+- **[minRowHeight]**: number.
+
+  The minimum height of the row in pixels.
+
+- **(change)="onChangeData($event)"**:
+
+  create two variables and update them with the events from change event as shown.
+
+```ts
+displayData = [];
+actualIndex = 0;
+.....
+......
+onChangeData(event: any) {
+    this.displayData = event.data;
+    this.actualIndex = event.startIndex;
+  }
+```
+
+- **ngxVirtualScrollElement**
+
+  Add the directive to the div for row elements of the virtual scroll.
+
+- **[minRowHeight]**: number.
+
+  The minimum height of the row in pixels.
+
+- **[rangeStart]**: number.
+
+  Pass the data from change event.
+
+  ** include other inputs in ngxVirtualScrollElement row, like ngFor and [elemIndex] **
+
+## License
+
+MIT © [Raghu Ram M](mailto:mraghuram3@gmail.com)
