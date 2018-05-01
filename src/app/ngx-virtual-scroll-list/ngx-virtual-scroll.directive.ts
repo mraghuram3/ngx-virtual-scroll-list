@@ -32,7 +32,7 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
   }
 
   @Input('minRowHeight')
-  set minRowHeight(minRowHeight: number){
+  set minRowHeight(minRowHeight: number) {
     this.itemHeight = minRowHeight;
   }
 
@@ -52,6 +52,8 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
     this.scrollerHeight = this.itemCount * this.itemHeight;
     this.maxBuffer = this.screenItemsLen * this.itemHeight;
     const div = this.renderer.createElement('div');
+    this.renderer.setStyle(this.el.nativeElement, 'overflow', 'auto');
+    this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
     this.renderer.setStyle(div, 'opacity', '0');
     this.renderer.setStyle(div, 'position', 'absolute');
     this.renderer.setStyle(div, 'top', '0px');

@@ -17,7 +17,7 @@ $ npm install ngx-virtual-scroll-list --save
 Import `NgxVirtualScrollModule` in the root module
 
 ```ts
-import { NgxVirtualScrollModule } from 'ngx-text-highlight';
+import { NgxVirtualScrollModule } from 'ngx-virtual-scroll-list';
 
 @NgModule({
   imports: [
@@ -31,8 +31,8 @@ import { NgxVirtualScrollModule } from 'ngx-text-highlight';
 In your template
 
 ```html
-<div ngxVirtualScroll [items]="data" [minRowHeight]="25" (change)="onChangeData($event)" class="parent">
-    <div ngxVirtualScrollElement [minRowHeight]="25" *ngFor="let r of displayData;let i = index;" [rangeStart]="actualIndex" [elemIndex]="i">{{r}}</div>
+<div ngxVirtualScroll [items]="data" [minRowHeight]="25" (change)="displayData = $event.data;actualIndex = $event.startIndex;" class="parent">
+  <div ngxVirtualScrollElement [minRowHeight]="25" *ngFor="let r of displayData;let i = index;" [rangeStart]="actualIndex" [elemIndex]="i">{{r}}</div>
 </div>
 ```
 - **ngxVirtualScroll**
@@ -47,7 +47,7 @@ In your template
 
   The minimum height of the row in pixels.
 
-- **(change)="onChangeData($event)"**:
+- **(change)="displayData = $event.data;actualIndex = $event.startIndex;"**:
 
   create two variables and update them with the events from change event as shown.
 
@@ -56,10 +56,6 @@ displayData = [];
 actualIndex = 0;
 .....
 ......
-onChangeData(event: any) {
-    this.displayData = event.data;
-    this.actualIndex = event.startIndex;
-  }
 ```
 
 - **ngxVirtualScrollElement**
@@ -75,6 +71,17 @@ onChangeData(event: any) {
   Pass the data from change event.
 
   ** include other inputs in ngxVirtualScrollElement row, like ngFor and [elemIndex] **
+
+
+  ** Specify height for the parent div in px, vh, em or rem (otherthan percentage) **
+
+```css
+.parent{
+    height:300px;
+    width:300px;
+}
+
+````
 
 ## License
 
