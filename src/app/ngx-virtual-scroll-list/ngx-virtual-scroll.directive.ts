@@ -48,7 +48,7 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
 
     this.screenHieght = this.el.nativeElement.clientHeight;
     this.screenItemsLen = Math.floor(this.screenHieght / this.itemHeight);
-    this.cachedItemsLen = this.screenItemsLen * 3;
+    this.cachedItemsLen = this.screenItemsLen * 5;
     this.scrollerHeight = this.itemCount * this.itemHeight;
     this.maxBuffer = this.screenItemsLen * this.itemHeight;
     const div = this.renderer.createElement('div');
@@ -69,10 +69,11 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
 
     if (!this.lastRepaintY || Math.abs(scrollTop - this.lastRepaintY) > this.maxBuffer) {
      let first =  Math.floor(scrollTop / this.itemHeight) - this.screenItemsLen;
-       if (first < 0)
-       {
+       if (first < 0) {
          first = 0;
-       }
+       } else if (first > this.data.length - this.screenItemsLen){
+        first = this.data.length - this.screenItemsLen;
+      }
      this.start = first;
      this.updateData(this.start);
      this.lastRepaintY = scrollTop;
