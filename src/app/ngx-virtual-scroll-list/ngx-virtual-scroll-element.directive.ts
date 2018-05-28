@@ -15,7 +15,8 @@ export class NgxVirtualScrollElementDirective {
 
   @Input('elemIndex')
   set elemIndex(elemIndex: number) {
-    this.renderer.setStyle(this.el.nativeElement, 'transform', 'translateY(' + (this._rangeStart + elemIndex) * 25  + 'px)');
+    // this.renderer.setStyle(this.el.nativeElement, 'transform', 'translateY(' + (this._rangeStart + elemIndex) * 25  + 'px)');
+    this.renderer.setStyle(this.el.nativeElement, 'top',  (this._rangeStart + elemIndex) * 25  + 'px');
   }
 
   @Input('minRowHeight')

@@ -1,9 +1,5 @@
 import { Directive, Renderer2, ElementRef, Input, AfterViewInit, Output, EventEmitter, HostListener } from '@angular/core';
 
-import {Observable} from 'rxjs/Rx';
-
-import 'rxjs/add/observable/fromEvent';
-
 @Directive({
   selector: '[ngxVirtualScroll]'
 })
@@ -20,40 +16,51 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
   maxBuffer: number;
   displayData = [];
 
-  fire = true;
-
   @Output()
-  private change: EventEmitter<ScollData> = new EventEmitter<ScollData>();
+  private change: EventEmitter<ScrollData> = new EventEmitter<ScrollData>();
 
   @Input('items')
   set items(items: any[]){
     this.data = items;
     this.itemCount = items.length;
+    this.initscrollList();
   }
 
   @Input('minRowHeight')
   set minRowHeight(minRowHeight: number) {
     this.itemHeight = minRowHeight;
+    this.initscrollList();
+  }
+
+  @HostListener('scroll' , ['$event']) onScroll(event){
+    this.processData(event);
   }
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
     this.start = 0;
   }
   ngAfterViewInit() {
+  }
 
-    const observables = this.getObservables(this.el.nativeElement);
-    observables.scroll.forEach((event: any) => {
-       this.processData(event);
-    });
-
+  initscrollList() {
     this.screenHieght = this.el.nativeElement.clientHeight;
     this.screenItemsLen = Math.floor(this.screenHieght / this.itemHeight);
-    this.cachedItemsLen = this.screenItemsLen * 5;
+    this.cachedItemsLen = this.screenItemsLen * 3;
     this.scrollerHeight = this.itemCount * this.itemHeight;
     this.maxBuffer = this.screenItemsLen * this.itemHeight;
-    const div = this.renderer.createElement('div');
+    let x = null;
+    let div;
+    if (this.el.nativeElement.children && this.el.nativeElement.children.length > 0){
+      x =  this.el.nativeElement.querySelector( '.scroller');
+    }
+    if (x === null) {
+      div = this.renderer.createElement('div');
+    } else {
+      div = x;
+    }
     this.renderer.setStyle(this.el.nativeElement, 'overflow', 'auto');
     this.renderer.setStyle(this.el.nativeElement, 'position', 'relative');
+    this.renderer.setAttribute(div, 'class', 'scroller');
     this.renderer.setStyle(div, 'opacity', '0');
     this.renderer.setStyle(div, 'position', 'absolute');
     this.renderer.setStyle(div, 'top', '0px');
@@ -90,19 +97,15 @@ export class NgxVirtualScrollDirective implements AfterViewInit{
 
     this.displayData = this.data.slice(start, end);
 
-    const Data = new ScollData();
+    const Data = new ScrollData();
     Data.data = this.displayData;
     Data.startIndex = start;
     this.change.emit(Data);
   }
 
-  getObservables(domItem) {
-    const scroll = Observable.fromEvent(domItem, 'scroll');
-    return { scroll };
-  }
 }
 
-class ScollData {
+class ScrollData {
   data: Array<any>;
   startIndex: number;
 }
