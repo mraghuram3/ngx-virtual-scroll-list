@@ -22,7 +22,7 @@ import { NgxVirtualScrollModule } from 'ngx-virtual-scroll-list';
 @NgModule({
   imports: [
     // ...
-    NgxVirtualScrollModule.forRoot(),
+    NgxVirtualScrollModule,
     ...
   ]
 })
